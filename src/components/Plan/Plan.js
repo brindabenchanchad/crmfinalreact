@@ -28,6 +28,7 @@ const Plan = () => {
         };
         getComments();
     }, [limit]);
+    
     const fetchComments = async (currentPage) => {
         // console.log(currentPage);
         const res = await fetch(
@@ -36,6 +37,7 @@ const Plan = () => {
         const data = await res.json();
         return data;
     };
+    
     const handlePageClick = async (data) => {
 
         let currentPage = data.selected + 1;
