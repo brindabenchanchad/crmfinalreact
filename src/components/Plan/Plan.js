@@ -2,12 +2,12 @@ import React from "react";
 import Navbar from "../Navbar/Navbar";
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Plan = () => {
-    const history = useNavigate();
     const [items, setItems] = useState([]);
     const [pageCount, setpageCount] = useState(0);
+    const [flag, setFlag] = useState(0);
     let limit = 5;
 
     useEffect(() => {
@@ -43,16 +43,16 @@ const Plan = () => {
         const commentsFormServer = await fetchComments(currentPage);
 
         setItems(commentsFormServer);
-        console.log(items);
+        // console.log(items);
     };
     const deletefn = async (id) => {
-        console.log(id);
+
         if (window.confirm('Are you sure you want to delete ?')) {
             const planData = {
                 is_deleted: 1,
             }
             await fetch(`http://localhost/yii/crmfinal/frontend/web/index.php/plans/${id}`, {
-                method: 'PUT',
+                method: 'DELETE',
                 body: JSON.stringify(planData),
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,6 +63,21 @@ const Plan = () => {
             alert('Problem in deletion');
         }
         window.location.reload(true);
+    }
+    const handleSorting = async (event) => {
+        if (flag === 0) {
+            setFlag(1);
+        }
+        else {
+            event = '-' + event;
+            setFlag(0);
+        }
+        const res = await fetch(
+            `http://localhost/yii/crmfinal/frontend/web/index.php/plans?sort=${event}`
+        );
+        const data = await res.json();
+        // console.log(data);
+        setItems(data);
     }
     return (
         <>
@@ -85,29 +100,29 @@ const Plan = () => {
                                     </tr>
                                     <tr>
 
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Plan Name
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('plan_name')}>
+                                            Plan Name▼
                                         </th>
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Plan Description
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('plan_description')}>
+                                            Plan Description▼
                                         </th>
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Plan Duration
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('plan_duration')}>
+                                            Plan Duration▼
                                         </th>
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Plan Price
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('plan_price')}>
+                                            Plan Price▼
                                         </th>
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
+                                        {/* <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
                                             Is Deleted
-                                        </th>
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Create Date
+                                        </th> */}
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('created_at')}>
+                                            Create Date▼
                                         </th>
                                         <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
                                             Action
                                         </th>
                                     </tr>
-                                    {/* <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                                    <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                             <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="plan Name"  id="plan_name" />
                                         </td>
@@ -115,17 +130,23 @@ const Plan = () => {
                                             <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="plan Description" id="plan_description" />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="plan Date"  id="created_at" />
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Duration"  id="plan_duration" />
+                                        </td>
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Price" id="plan_price" />
+                                        </td>
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Date" id="created_at" />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                            
                                         </td>
-                                    </tr> */}
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {items.map((plan) => (
-                                        <tr key={plan.plan_id} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                            
+                                        <tr key={plan.plan_id} className="bg-white border-black transition duration-300 ease-in-out hover:bg-gray-100">
+
                                             <td
                                                 td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {plan.plan_name}
@@ -139,11 +160,11 @@ const Plan = () => {
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {plan.plan_price}
                                             </td>
-                                            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                {plan.is_deleted === 1 && <span className="text-red-500">Deleted</span>}
-                                                {plan.is_deleted === 0 && <span className="text-green-500">Not Deleted</span>}
-                                                
-                                            </td>
+                                            {/* <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap text-center">
+                                                {plan.is_deleted === 1 && <span className="text-red-500">✔︎</span>}
+                                                {plan.is_deleted === 0 && <span className="text-green-500">❌</span>}
+
+                                            </td> */}
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {`${('0' + new Date(plan.created_at).getDate()).slice(-2)}-${('0' + new Date(plan.created_at).getMonth() + 1).slice(-2)}-${new Date(plan.created_at).getFullYear()}`}{' '}
                                                 at{' '}
@@ -152,16 +173,15 @@ const Plan = () => {
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {
-                                                    plan.is_deleted && <span className="text-green-700 text-xl">
-                                                    No Action Needed
-                                                    </span>
+                                                    // plan.is_deleted ? <span className="text-green-700 text-m">
+                                                    //     No Action Needed
+                                                    // </span> : 
+                                                    <button className="list-none bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 m-2 rounded" onClick={() => deletefn(plan.plan_id)}>
+                                                        - Delete
+                                                    </button>
                                                 }
-                                                {
-                                                    !plan.is_deleted && <button className="list-none bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 m-2 rounded" onClick={() => deletefn(plan.plan_id)}>
-                                                    - Delete
-                                                </button>
-                                                }
-                                                
+
+
                                             </td>
                                         </tr>
                                     ))}
