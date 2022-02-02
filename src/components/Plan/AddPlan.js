@@ -111,7 +111,7 @@ function AddPlan() {
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="planname">
                             Plan Name<span className="text-red-500"> *</span>
                         </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="planname" type="text" placeholder="Plan name" onBlur={onNameChange} onChange={onNameChange} ref={nameRef} />
+                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="planname" type="text" placeholder="Plan name" onBlur={onNameChange} onChange={onNameChange} ref={nameRef}/>
                         {!nameIsValid &&
                             <span className="text-red-400">Plan Name Should not be empty.</span>
                         }

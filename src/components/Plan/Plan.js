@@ -9,7 +9,24 @@ const Plan = () => {
     const [pageCount, setpageCount] = useState(0);
     const [flag, setFlag] = useState(0);
     let limit = 5;
+    const changeHandler = async (event) => {
+        const res = await fetch(
+            `http://localhost/yii/crmfinal/frontend/web/index.php/plans?filter[${event.target.id}][like]=${event.target.value}`
+        );
+        const data = await res.json();
+        // console.log(data);
+        setItems(data);
 
+    }
+    const priceChangeHandler = async (event) => {
+        const res = await fetch(
+            `http://localhost/yii/crmfinal/frontend/web/index.php/plans?filter[${event.target.id}]=${event.target.value}`
+        );
+        const data = await res.json();
+        // console.log(data);
+        setItems(data);
+
+    }
     useEffect(() => {
         const getComments = async () => {
             const demo = await fetch(
@@ -124,22 +141,22 @@ const Plan = () => {
                                     </tr>
                                     <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="plan Name"  id="plan_name" />
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Name" id="plan_name" onChange={changeHandler} />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="plan Description" id="plan_description" />
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Description" id="plan_description" onChange={changeHandler} />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Duration"  id="plan_duration" />
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Duration" id="plan_duration" onChange={changeHandler} />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Price" id="plan_price" />
+                                            <input type="number" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Price" id="plan_price" onChange={priceChangeHandler} />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Date" id="created_at" />
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Date" id="created_at" onChange={changeHandler} />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                           
+
                                         </td>
                                     </tr>
                                 </thead>
