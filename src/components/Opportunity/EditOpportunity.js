@@ -15,6 +15,9 @@ function UpdateOpportunity() {
     const planRef = useRef('');
     const [items, setItems] = useState([]);
 
+    const [formIsValid, setFormIsValid] = useState(true);
+    const [dataIsInserted, setDataIsInserted] = useState([]);
+
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -36,28 +39,41 @@ function UpdateOpportunity() {
 
     async function submitHandler(event) {
         event.preventDefault();
-
-        const opportunity = {
-            firstname: firstnameRef.current.value,
-            middlename: middlenameRef.current.value,
-            lastname: lastnameRef.current.value,
-            email_id: emailRef.current.value,
-            contact_no: Number(contactRef.current.value),
-            city: cityRef.current.value,
-            state: stateRef.current.value,
-            country: countryRef.current.value,
-            plan_id: planRef.current.value
+        if (firstnameRef.current.value.trim() === "" || lastnameRef.current.value.trim() === "" || emailRef.current.value.trim() === "" || contactRef.current.value.trim() === "" || cityRef.current.value.trim() === "" || stateRef.current.value.trim() === "" || countryRef.current.value.trim() === "" || planRef.current.value.trim() === " ") {
+            setFormIsValid(false);
+            // console.log("coomibnf");
+            return;
         }
-        const opportunities = await fetch(`http://localhost/yii/crmfinal/frontend/web/index.php/opportunities/${id}`, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: "PUT",
-            body: JSON.stringify(opportunity)
-        });
+        else {
+            setFormIsValid(true);
 
-        navigate('/opportunity');
+            const opportunity = {
+                firstname: firstnameRef.current.value,
+                middlename: middlenameRef.current.value,
+                lastname: lastnameRef.current.value,
+                email_id: emailRef.current.value,
+                contact_no: Number(contactRef.current.value),
+                city: cityRef.current.value,
+                state: stateRef.current.value,
+                country: countryRef.current.value,
+                plan_id: planRef.current.value
+            }
+            const opportunities = await fetch(`http://localhost/yii/crmfinal/frontend/web/index.php/opportunities/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: "PUT",
+                body: JSON.stringify(opportunity)
+            });
+            const data = await opportunities.json();
 
+            if (opportunities.status === 200) {
+                navigate('/opportunity');
+            }
+            else {
+                setDataIsInserted(data);
+            }
+        }
     };
     const getPlans = async () => {
         const plan = await fetch(
@@ -74,12 +90,23 @@ function UpdateOpportunity() {
             <Navbar />
             <div className="flex flex-col h-screen justify-center items-center">
                 <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-2/6 h-full" onSubmit={submitHandler}>
-                    <h3 className="text-4xl font-normal leading-normal mt-0 mb-2 text-gray-700">
+                    <div className="text-danger">
+                        {!formIsValid && "* Indicates All fields are mandatory"}
+                    </div>
+                    <h3 className="text-4xl font-normal leading-normal mt-0 mb-2 text-gray-700 text-center">
                         Update Opportunity
                     </h3>
+                    <span className="text-danger">
+                        * Required
+                    </span>
+                    <div className="text-danger">
+                        {dataIsInserted.map((data) => (
+                            data.message
+                        ))}
+                    </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taskname">
-                            First Name
+                            First Name<span className="text-red-500"> *</span>
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" ref={firstnameRef} />
                     </div>
@@ -92,45 +119,45 @@ function UpdateOpportunity() {
 
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taskname">
-                            Last Name
+                            Last Name<span className="text-red-500"> *</span>
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" ref={lastnameRef} />
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taskname">
-                            Contact No
+                            Contact No<span className="text-red-500"> *</span>
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" ref={contactRef} />
                     </div>
 
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taskname">
-                            Email ID
+                            Email ID<span className="text-red-500"> *</span>
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" ref={emailRef} />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taskname">
-                            City
+                            City<span className="text-red-500"> *</span>
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" ref={cityRef} />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taskname">
-                            State
+                            State<span className="text-red-500"> *</span>
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" ref={stateRef} />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taskname">
-                            Country
+                            Country<span className="text-red-500"> *</span>
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" ref={countryRef} />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taskname">
-                            Plan
+                            Plan<span className="text-red-500"> *</span>
                         </label>
                         <select ref={planRef}>
                             {items.map((plan) => (
