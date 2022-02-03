@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import Navbar from "../Navbar/Navbar";
+import { useNavigate } from 'react-router-dom';
 
 function AddLead() {
 
@@ -11,32 +12,20 @@ function AddLead() {
     const cityRef = useRef('');
     const stateRef = useRef('');
     const countryRef = useRef('');
+    const navigate = useNavigate();
     
     async function submitHandler(event) {
         event.preventDefault();
 
-        // const lead = {
-        //     firstname: firstnameRef.current.value,
-        //     lastname: lastnameRef.current.value,
-        //     email_id: emailRef.current.value,
-        //     contact_no: Number(contactRef.current.value),
-        //     city: cityRef.current.value,
-        //     state: stateRef.current.value,
-        //     country: countryRef.current.value
-        // }
-
         const lead = {
-            city: "xyz",
-            state: "xyz",
-            country: "xyz",
-            firstname: "xyz",
-            lastname: "xyz",
-            contact_no: 987654321,    
-            email_id: "xyz@xyz.com"
+            firstname: firstnameRef.current.value,
+            lastname: lastnameRef.current.value,
+            email_id: emailRef.current.value,
+            contact_no: Number(contactRef.current.value),
+            city: cityRef.current.value,
+            state: stateRef.current.value,
+            country: countryRef.current.value
         }
-
-
-        // console.log(lead);
 
         const leads = await fetch("http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads", {
             headers: {
@@ -46,6 +35,7 @@ function AddLead() {
             body: JSON.stringify(lead)
         });
 
+        navigate('/leads');
     };
 
     return (
