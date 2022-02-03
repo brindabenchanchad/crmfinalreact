@@ -213,9 +213,11 @@ const Lead = () => {
                                                 <button className="bg-red-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-2 rounded" exact="true" onClick={() => deletefn(lead.lead_id)}>
                                                     Delete
                                                 </button>
+                                                <NavLink to={"convert/" + lead.lead_id} exact="true">
                                                 <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-2 rounded">
                                                     Convert to Opportunity
                                                 </button>
+                                                </NavLink>
                                             </td>
                                         </tr>
                                     ))}
