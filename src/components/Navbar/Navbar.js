@@ -19,6 +19,9 @@ const Navbar = () => {
                                     <NavLink to="/plan" className="no-underline text-white">
                                         <li className="list-none px-3 py-2 rounded-md">Plan</li>
                                     </NavLink>
+                                    <NavLink to="/opportunity" className="no-underline text-white">
+                                        <li className="list-none px-3 py-2 rounded-md">Opportunity</li>
+                                    </NavLink>
                                     {/* <button className="float-right bg-gray-500 hover:bg-gray-700 text-white font-bold rounded">
                                         <NavLink to="/task/add"><li className="list-none  px-3 py-2 rounded-md ">Add Task</li></NavLink>
                                     </button> */}

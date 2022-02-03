@@ -5,6 +5,10 @@ import Home from './components/Home/Home';
 import Plan from './components/Plan/Plan';
 import AddPlan from './components/Plan/AddPlan';
 import { Route,Routes } from 'react-router-dom';
+import Opportunity from './components/Opportunity/Opportunity';
+import AddOpportunity from './components/Opportunity/AddOpportunity';
+import UpdateOpportunity from './components/Opportunity/EditOpportunity';
+
 
 function App() {
   return (
@@ -12,6 +16,9 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/plan" element={<Plan />} />
       <Route path="/plan/add" element={<AddPlan />} />
+      <Route path="/opportunity" element={<Opportunity />} />
+      <Route path="/opportunity/add" element={<AddOpportunity />} />
+      <Route path="opportunity/update/:id" element={<UpdateOpportunity />} />
 
     </Routes>
   );

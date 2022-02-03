@@ -71,7 +71,6 @@ function AddPlan() {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log(response.status);
             const data = await response.json();
             if (response.status === 200) {
                 history('/plan');
