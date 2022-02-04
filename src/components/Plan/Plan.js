@@ -200,8 +200,6 @@ const Plan = () => {
                                                         - Delete
                                                     </button>
                                                 }
-
-
                                             </td>
                                         </tr>
                                     ))}
