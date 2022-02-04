@@ -10,16 +10,16 @@ const Lead = () => {
     const [trackPage, setTrackPage] = useState(1);
     const [pageCount, setpageCount] = useState(0);
 
-    let limit = 3;
+    let limit = 5;
 
     const getComments = async () => {
         const demo = await fetch(
-            `http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads`
+            `http://localhost/yii/crmfinal/frontend/web/index.php/leads`
         );
         const datademo = await demo.json();
         const total = datademo.length;
         const res = await fetch(
-            `http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads?per-page=${limit}&page=1`
+            `http://localhost/yii/crmfinal/frontend/web/index.php/leads?per-page=${limit}&page=1`
         );
         setTrackPage(1);
         const data = await res.json();
@@ -36,7 +36,7 @@ const Lead = () => {
     const fetchComments = async (currentPage) => {
         // console.log(currentPage);
         const res = await fetch(
-            `http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads?per-page=${limit}&page=${currentPage}`
+            `http://localhost/yii/crmfinal/frontend/web/index.php/leads?per-page=${limit}&page=${currentPage}`
         );
         setTrackPage(currentPage);
         const data = await res.json();
@@ -62,7 +62,7 @@ const Lead = () => {
         }
         setTrackPage(1);
         const res = await fetch(
-            `http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads?sort=${event}&per-page=${limit}&page=${trackPage}`
+            `http://localhost/yii/crmfinal/frontend/web/index.php/leads?sort=${event}&per-page=${limit}&page=${trackPage}`
         );
         const data = await res.json();
         
@@ -74,7 +74,7 @@ const Lead = () => {
 
         if(column_name == 'lead_id') {
             const res = await fetch(
-                `http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads?filter[lead_id]=${event.target.value}&per-page=${limit}&page=${trackPage}`
+                `http://localhost/yii/crmfinal/frontend/web/index.php/leads?filter[lead_id]=${event.target.value}&per-page=${limit}&page=${trackPage}`
             );
             const data = await res.json();
             setItems(data);
@@ -82,7 +82,7 @@ const Lead = () => {
 
         if(column_name == 'contact_no') {
             const res = await fetch(
-                `http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads?filter[contact_no]=${event.target.value}&per-page=${limit}&page=${trackPage}`
+                `http://localhost/yii/crmfinal/frontend/web/index.php/leads?filter[contact_no]=${event.target.value}&per-page=${limit}&page=${trackPage}`
             );
             const data = await res.json();
             setItems(data);
@@ -90,7 +90,7 @@ const Lead = () => {
 
         if(column_name == 'firstname') {
             const res = await fetch(
-                `http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads?filter[firstname][like]=${event.target.value}&per-page=${limit}&page=${trackPage}`
+                `http://localhost/yii/crmfinal/frontend/web/index.php/leads?filter[firstname][like]=${event.target.value}&per-page=${limit}&page=${trackPage}`
             );
             const data = await res.json();
             setItems(data);
@@ -98,7 +98,7 @@ const Lead = () => {
 
         if(column_name == 'email_id') {
             const res = await fetch(
-                `http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads?filter[email_id][like]=${event.target.value}&per-page=${limit}&page=${trackPage}`
+                `http://localhost/yii/crmfinal/frontend/web/index.php/leads?filter[email_id][like]=${event.target.value}&per-page=${limit}&page=${trackPage}`
             );
             const data = await res.json();
             setItems(data);
@@ -106,7 +106,7 @@ const Lead = () => {
 
         if(column_name == 'city') {
             const res = await fetch(
-                `http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads?filter[city][like]=${event.target.value}&per-page=${limit}&page=${trackPage}`
+                `http://localhost/yii/crmfinal/frontend/web/index.php/leads?filter[city][like]=${event.target.value}&per-page=${limit}&page=${trackPage}`
             );
             const data = await res.json();
             setItems(data);
@@ -116,7 +116,7 @@ const Lead = () => {
     const deletefn = async (id) => {
         console.log(id);
         if (window.confirm('Are you sure you want to delete ?')) {
-            await fetch(`http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads/${id}`, {
+            await fetch(`http://localhost/yii/crmfinal/frontend/web/index.php/leads/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -148,11 +148,8 @@ const Lead = () => {
                                         </td>
                                     </tr>
                                     <tr>
-                                    <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('lead_id')}>
-                                            Lead ID▼
-                                        </th>
                                     <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('firstname')}>
-                                            Lead Name▼
+                                            Lead Full Name▼
                                         </th>
                                         <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('email_id')}>
                                             Lead Email▼
@@ -161,13 +158,10 @@ const Lead = () => {
                                             Lead Contact▼
                                         </th>
                                         <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('city')}>
-                                            Lead City▼
+                                            Lead Address▼
                                         </th>
                                     </tr>
                                     <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Lead ID" id="task_name" onChange={(event) => handleSearching('lead_id', event)} />
-                                        </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                             <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Lead Name" id="task_description" onChange={(event) => handleSearching('firstname', event)} />
                                         </td>
@@ -186,10 +180,7 @@ const Lead = () => {
                                     {items.map((lead) => (
                                         <tr key={lead.lead_id} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                {lead.lead_id}
-                                            </td>
-                                            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                {lead.person.firstname}
+                                            {`${lead.person.firstname} ${lead.person.lastname}`}
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {lead.person.email_id}
@@ -198,7 +189,7 @@ const Lead = () => {
                                                 {lead.person.contact_no}
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                {lead.address.city}
+                                                {`${lead.address.city}, ${lead.address.state}, ${lead.address.country}`}
                                             </td>
                                             {/* <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {`${('0' + new Date(lead.created_at).getDate()).slice(-2)}-${('0' + new Date(lead.created_at).getMonth() + 1).slice(-2)}-${new Date(lead.created_at).getFullYear()}`}{' '}
@@ -213,9 +204,11 @@ const Lead = () => {
                                                 <button className="bg-red-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-2 rounded" exact="true" onClick={() => deletefn(lead.lead_id)}>
                                                     Delete
                                                 </button>
+                                                <NavLink to={"convert/" + lead.lead_id} exact="true">
                                                 <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-2 rounded">
                                                     Convert to Opportunity
                                                 </button>
+                                                </NavLink>
                                             </td>
                                         </tr>
                                     ))}

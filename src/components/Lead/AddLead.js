@@ -27,7 +27,7 @@ function AddLead() {
             country: countryRef.current.value
         }
 
-        const leads = await fetch("http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads", {
+        const leads = await fetch("http://localhost/yii/crmfinal/frontend/web/index.php/leads", {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -42,8 +42,8 @@ function AddLead() {
         <div >
             <Navbar />
             <div className="flex flex-col h-screen justify-center items-center">
-                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={submitHandler}>
-                    <h3 className="text-4xl font-normal leading-normal mt-0 mb-2 text-gray-700">
+                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 h-screen w-2/6" onSubmit={submitHandler}>
+                    <h3 className="text-4xl font-normal leading-normal mt-0 mb-2 text-gray-700 text-center">
                         Add Lead
                     </h3>
                     <div className="mb-4">

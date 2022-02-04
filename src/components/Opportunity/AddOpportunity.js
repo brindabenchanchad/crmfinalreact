@@ -144,7 +144,7 @@ const AddOpportunity = () => {
                         </label>
                         <select ref={planRef}>
                             {items.map((plan) => (
-                                <option value={plan.plan_id}>{plan.plan_name}</option>
+                                <option key={plan.plan_id} value={plan.plan_id}>{plan.plan_name}</option>
                             ))}
                         </select>
                     </div>

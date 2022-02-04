@@ -17,7 +17,7 @@ function UpdateLead() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads/${id}`)
+        fetch(`http://localhost/yii/crmfinal/frontend/web/index.php/leads/${id}`)
             .then((res) => res.json())
             .then((result) => {
                 console.log(result);
@@ -45,7 +45,7 @@ function UpdateLead() {
             country: countryRef.current.value
         }
 
-        const leads = await fetch(`http://localhost:8012/yii/crmfinalyii/frontend/web/index.php/leads/${id}`, {
+        const leads = await fetch(`http://localhost/yii/crmfinal/frontend/web/index.php/leads/${id}`, {
             headers: {
                 'Content-Type': 'application/json'
             },

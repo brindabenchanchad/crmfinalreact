@@ -19,6 +19,9 @@ const Navbar = () => {
                                     <NavLink to="/plan" className="no-underline text-white">
                                         <li className="list-none px-3 py-2 rounded-md">Plan</li>
                                     </NavLink>
+                                    <NavLink to="/leads" className="no-underline text-white">
+                                        <li className="list-none px-3 py-2 rounded-md">Leads</li>
+                                    </NavLink>
                                     <NavLink to="/opportunity" className="no-underline text-white">
                                         <li className="list-none px-3 py-2 rounded-md">Opportunity</li>
                                     </NavLink>
