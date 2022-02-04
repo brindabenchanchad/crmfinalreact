@@ -148,11 +148,8 @@ const Lead = () => {
                                         </td>
                                     </tr>
                                     <tr>
-                                    <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('lead_id')}>
-                                            Lead ID▼
-                                        </th>
                                     <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('firstname')}>
-                                            Lead Name▼
+                                            Lead Full Name▼
                                         </th>
                                         <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('email_id')}>
                                             Lead Email▼
@@ -161,13 +158,10 @@ const Lead = () => {
                                             Lead Contact▼
                                         </th>
                                         <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('city')}>
-                                            Lead City▼
+                                            Lead Address▼
                                         </th>
                                     </tr>
                                     <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Lead ID" id="task_name" onChange={(event) => handleSearching('lead_id', event)} />
-                                        </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                             <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Lead Name" id="task_description" onChange={(event) => handleSearching('firstname', event)} />
                                         </td>
@@ -186,10 +180,7 @@ const Lead = () => {
                                     {items.map((lead) => (
                                         <tr key={lead.lead_id} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                {lead.lead_id}
-                                            </td>
-                                            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                {lead.person.firstname}
+                                            {`${lead.person.firstname} ${lead.person.lastname}`}
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {lead.person.email_id}
@@ -198,7 +189,7 @@ const Lead = () => {
                                                 {lead.person.contact_no}
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                {lead.address.city}
+                                                {`${lead.address.city}, ${lead.address.state}, ${lead.address.country}`}
                                             </td>
                                             {/* <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {`${('0' + new Date(lead.created_at).getDate()).slice(-2)}-${('0' + new Date(lead.created_at).getMonth() + 1).slice(-2)}-${new Date(lead.created_at).getFullYear()}`}{' '}

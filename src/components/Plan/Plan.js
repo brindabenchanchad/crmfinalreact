@@ -7,9 +7,26 @@ import { NavLink } from "react-router-dom";
 const Plan = () => {
     const [items, setItems] = useState([]);
     const [pageCount, setpageCount] = useState(0);
-
+    const [flag, setFlag] = useState(0);
     let limit = 5;
+    const changeHandler = async (event) => {
+        const res = await fetch(
+            `http://localhost/yii/crmfinal/frontend/web/index.php/plans?filter[${event.target.id}][like]=${event.target.value}`
+        );
+        const data = await res.json();
+        // console.log(data);
+        setItems(data);
 
+    }
+    const priceChangeHandler = async (event) => {
+        const res = await fetch(
+            `http://localhost/yii/crmfinal/frontend/web/index.php/plans?filter[${event.target.id}]=${event.target.value}`
+        );
+        const data = await res.json();
+        // console.log(data);
+        setItems(data);
+
+    }
     useEffect(() => {
         const getComments = async () => {
             const demo = await fetch(
@@ -43,8 +60,42 @@ const Plan = () => {
         const commentsFormServer = await fetchComments(currentPage);
 
         setItems(commentsFormServer);
-        console.log(items);
+        // console.log(items);
     };
+    const deletefn = async (id) => {
+
+        if (window.confirm('Are you sure you want to delete ?')) {
+            const planData = {
+                is_deleted: 1,
+            }
+            await fetch(`http://localhost/yii/crmfinal/frontend/web/index.php/plans/${id}`, {
+                method: 'DELETE',
+                body: JSON.stringify(planData),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+        }
+        else {
+            alert('Problem in deletion');
+        }
+        window.location.reload(true);
+    }
+    const handleSorting = async (event) => {
+        if (flag === 0) {
+            setFlag(1);
+        }
+        else {
+            event = '-' + event;
+            setFlag(0);
+        }
+        const res = await fetch(
+            `http://localhost/yii/crmfinal/frontend/web/index.php/plans?sort=${event}`
+        );
+        const data = await res.json();
+        // console.log(data);
+        setItems(data);
+    }
     return (
         <>
             <Navbar />
@@ -56,54 +107,65 @@ const Plan = () => {
 
                             <table className="min-w-full">
                                 <thead className="bg-white border-b">
-                                    <tr className="bg-gray-400 border-b transition duration-300 ease-in-out">
+                                    <tr className="bg-gray-400 border-b tran    tion duration-300 ease-in-out">
                                         <td colSpan="4" className="font-bold text-2xl text-center text-white px-6 py-4">Plan</td>
-                                        <td colSpan="2" className="">
-                                            <button className="float-right bg-gray-200 hover:bg-gray-400 text-white font-bold rounded">
-                                            <NavLink to="/plan/add"><li className="list-none  px-3 py-2 rounded-md ">Add Plan</li></NavLink>
-                                        </button></td>
-
+                                        <td colSpan="3" className="font-bold text-2xl text-center text-white px-6 py-4">
+                                            <button className="float-right bg-green-300 hover:bg-green-500 text-white font-bold rounded">
+                                                <NavLink to="/plan/add" className="no-underline text-white"><li className="list-none px-3 py-2 rounded-md ">+ Add Plan</li></NavLink>
+                                            </button>
+                                        </td>
                                     </tr>
                                     <tr>
 
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Plan Name
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('plan_name')}>
+                                            Plan Name▼
                                         </th>
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Plan Description
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('plan_description')}>
+                                            Plan Description▼
                                         </th>
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Plan Duration
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('plan_duration')}>
+                                            Plan Duration▼
                                         </th>
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Plan Price
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('plan_price')}>
+                                            Plan Price▼
                                         </th>
-                                        <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
-                                            Create Date
+                                        {/* <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
+                                            Is Deleted
+                                        </th> */}
+                                        <th scope="col" className="cursor-pointer text-sm font-medium text-gray-900 px-6 py-4" onClick={() => handleSorting('created_at')}>
+                                            Create Date▼
                                         </th>
                                         <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4">
                                             Action
                                         </th>
                                     </tr>
-                                    {/* <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                                    <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="plan Name"  id="plan_name" />
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Name" id="plan_name" onChange={changeHandler} />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="plan Description" id="plan_description" />
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Description" id="plan_description" onChange={changeHandler} />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="plan Date"  id="created_at" />
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Duration" id="plan_duration" onChange={changeHandler} />
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                           
+                                            <input type="number" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Price" id="plan_price" onChange={priceChangeHandler} />
                                         </td>
-                                    </tr> */}
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            <input type="text" className="shadow appearance-none border-4 border-slate-400 rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Date" id="created_at" onChange={changeHandler} />
+                                        </td>
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+
+                                        </td>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {items.map((plan) => (
-                                        <tr key={plan.plan_id} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <tr key={plan.plan_id} className="bg-white border-black transition duration-300 ease-in-out hover:bg-gray-100">
+
+                                            <td
+                                                td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {plan.plan_name}
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
@@ -115,6 +177,11 @@ const Plan = () => {
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {plan.plan_price}
                                             </td>
+                                            {/* <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap text-center">
+                                                {plan.is_deleted === 1 && <span className="text-red-500">✔︎</span>}
+                                                {plan.is_deleted === 0 && <span className="text-green-500">❌</span>}
+
+                                            </td> */}
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 {`${('0' + new Date(plan.created_at).getDate()).slice(-2)}-${('0' + new Date(plan.created_at).getMonth() + 1).slice(-2)}-${new Date(plan.created_at).getFullYear()}`}{' '}
                                                 at{' '}
@@ -122,9 +189,16 @@ const Plan = () => {
 
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-2 rounded">
-                                                    <NavLink to={"/Editplan/" + plan.plan_id} exact="true">Edit</NavLink>
-                                                </button>
+                                                {
+                                                    // plan.is_deleted ? <span className="text-green-700 text-m">
+                                                    //     No Action Needed
+                                                    // </span> : 
+                                                    <button className="list-none bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 m-2 rounded" onClick={() => deletefn(plan.plan_id)}>
+                                                        - Delete
+                                                    </button>
+                                                }
+
+
                                             </td>
                                         </tr>
                                     ))}
