@@ -8,6 +8,7 @@ const Plan = () => {
     const [items, setItems] = useState([]);
     const [pageCount, setpageCount] = useState(0);
     const [flag, setFlag] = useState(0);
+    const [trackPage, setTrackPage] = useState(1);
     let limit = 5;
     const changeHandler = async (event) => {
         const res = await fetch(
@@ -27,22 +28,23 @@ const Plan = () => {
         setItems(data);
 
     }
+    const getComments = async () => {
+        const demo = await fetch(
+            `http://localhost/yii/crmfinal/frontend/web/index.php/plans`
+        );
+        const datademo = await demo.json();
+        const total = datademo.length;
+        const res = await fetch(
+            `http://localhost/yii/crmfinal/frontend/web/index.php/plans?per-page=${limit}&page=1`
+        );
+        const data = await res.json();
+        // console.log(data);
+        setItems(data);
+        setTrackPage(1);
+        // const total = data.length;
+        setpageCount(Math.ceil(total / limit));
+    };
     useEffect(() => {
-        const getComments = async () => {
-            const demo = await fetch(
-                `http://localhost/yii/crmfinal/frontend/web/index.php/plans`
-            );
-            const datademo = await demo.json();
-            const total = datademo.length;
-            const res = await fetch(
-                `http://localhost/yii/crmfinal/frontend/web/index.php/plans?per-page=${limit}&page=1`
-            );
-            const data = await res.json();
-            // console.log(data);
-            setItems(data);
-            // const total = data.length;
-            setpageCount(Math.ceil(total / limit));
-        };
         getComments();
     }, [limit]);
     const fetchComments = async (currentPage) => {
@@ -51,6 +53,7 @@ const Plan = () => {
             `http://localhost/yii/crmfinal/frontend/web/index.php/plans?per-page=${limit}&page=${currentPage}`
         );
         const data = await res.json();
+        setTrackPage(currentPage);
         return data;
     };
     const handlePageClick = async (data) => {
@@ -58,7 +61,6 @@ const Plan = () => {
         let currentPage = data.selected + 1;
 
         const commentsFormServer = await fetchComments(currentPage);
-
         setItems(commentsFormServer);
         // console.log(items);
     };
@@ -79,7 +81,7 @@ const Plan = () => {
         else {
             alert('Problem in deletion');
         }
-        window.location.reload(true);
+        getComments();
     }
     const handleSorting = async (event) => {
         if (flag === 0) {
@@ -89,8 +91,9 @@ const Plan = () => {
             event = '-' + event;
             setFlag(0);
         }
+        setTrackPage(1);
         const res = await fetch(
-            `http://localhost/yii/crmfinal/frontend/web/index.php/plans?sort=${event}`
+            `http://localhost/yii/crmfinal/frontend/web/index.php/plans?sort=${event}&per-page=${limit}&page=${trackPage}`
         );
         const data = await res.json();
         // console.log(data);
