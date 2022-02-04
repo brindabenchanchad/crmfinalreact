@@ -14,6 +14,7 @@ const Navbar = () => {
                                 <div className="flex ml-0 lg:ml-72 space-x-4 text-white text-xl">
                                     <NavLink to="/" exact="true"><li className="list-none  px-3 py-2 rounded-md">Home</li></NavLink>
                                     <NavLink to="/plan"><li className="list-none  px-3 py-2 rounded-md">Plan</li></NavLink>
+                                    <NavLink to="/customer"><li className="list-none  px-3 py-2 rounded-md">Customer</li></NavLink>
                                     {/* <button className="float-right bg-gray-500 hover:bg-gray-700 text-white font-bold rounded">
                                         <NavLink to="/task/add"><li className="list-none  px-3 py-2 rounded-md ">Add Task</li></NavLink>
                                     </button> */}
