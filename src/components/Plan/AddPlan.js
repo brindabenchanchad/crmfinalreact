@@ -1,10 +1,17 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 
-function AddPlan(props) {
+function AddPlan() {
+    const history = useNavigate();
     const nameRef = useRef('');
     const descriptionRef = useRef('');
+    const priceRef = useRef('');
+    const durationRef = useRef('');
+    const [formIsValid, setFormIsValid] = useState(true);
     const [nameIsValid, setNameIsValid] = useState(true);
+    const [durationIsValid, setDurationIsValid] = useState(true);
+    const [priceIsValid, setPriceIsValid] = useState(true);
     const [descriptionIsValid, setDescriptionIsValid] = useState(true);
     const onNameChange = (event) => {
         if (event.target.value.trim() === "") {
@@ -22,51 +29,103 @@ function AddPlan(props) {
             setDescriptionIsValid(true);
         }
     }
-
-    function submitHandler(event) {
+    const onpriceChange = (event) => {
+        if (event.target.value.trim() === "") {
+            setPriceIsValid(false);
+        }
+        else {
+            setPriceIsValid(true);
+        }
+    }
+    const onDurationChange = (event) => {
+        if (event.target.value.trim() === "") {
+            setDurationIsValid(false);
+        }
+        else {
+            setDurationIsValid(true);
+        }
+    }
+    const submitHandler = async (event) => {
 
         event.preventDefault();
 
-        // could add validation here...
-
-        const task = {
-            task_name: nameRef.current.value,
-            task_description: descriptionRef.current.value,
-        };
-
-        props.onAddPlan(task);
+        if (nameRef.current.value.trim() === "" || descriptionRef.current.value.trim() === "" || priceRef.current.value === "" || durationRef.current.value === "") {
+            setFormIsValid(false);
+            console.log("coomibnf");
+            return;
+        }
+        else {
+            setFormIsValid(true);
+            const plan = {
+                plan_name: nameRef.current.value,
+                plan_description: descriptionRef.current.value,
+                plan_duration: durationRef.current.value,
+                plan_price: priceRef.current.value,
+            };
+            const response = await fetch('http://localhost/yii/crmfinal/frontend/web/index.php/plans', {
+                method: 'POST',
+                body: JSON.stringify(plan),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            history('/plan');
+        }
     };
+
     return (
         <div >
             <Navbar />
-            <div className="flex flex-col h-screen justify-center items-center">
+            <div className="flex flex-col h-fit justify-center items-center">
+                <div className="text-danger">
+                    {!formIsValid && "All fields are mandatory"}
+                </div>
                 <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={submitHandler}>
                     <h3 className="text-4xl font-normal leading-normal mt-0 mb-2 text-gray-700">
-                        Add Task
+                        Add Plan
                     </h3>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="taskname">
-                            Task Name
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="planname">
+                            Plan Name
                         </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="taskname" type="text" placeholder="Task name" onBlur={onNameChange} onChange={onNameChange} ref={nameRef} />
+                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="planname" type="text" placeholder="Plan name" onBlur={onNameChange} onChange={onNameChange} ref={nameRef} />
                         {!nameIsValid &&
-                            <span className="text-red-400">Task Name Should not be empty.</span>
+                            <span className="text-red-400">Plan Name Should not be empty.</span>
                         }
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                            Task Description
+                            Plan Description
                         </label>
-                        <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Task Description" id="description" ref={descriptionRef} onBlur={onDescriptionChange} onChange={onDescriptionChange}></textarea>
+                        <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Plan Description" id="description" ref={descriptionRef} onBlur={onDescriptionChange} onChange={onDescriptionChange}></textarea>
                         {!descriptionIsValid &&
-                            <span className="text-red-400">Task Description Should not be empty.</span>
+                            <span className="text-red-400">Plan Description Should not be empty.</span>
+                        }
+                    </div>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="planduration">
+                            Plan Duration
+                        </label>
+                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="planduration" type="text" placeholder="Plan Duration" onBlur={onDurationChange} onChange={onDurationChange} ref={durationRef} />
+                        {!durationIsValid &&
+                            <span className="text-red-400">Plan Duration Should not be empty.</span>
+                        }
+                    </div>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="planprice">
+                            Plan Price
+                        </label>
+                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="planprice" type="text" placeholder="Plan Price" onBlur={onpriceChange} onChange={onpriceChange} ref={priceRef} />
+                        {!priceIsValid &&
+                            <span className="text-red-400">Plan Price Should not be empty </span>
                         }
                     </div>
                     <div className="flex items-center justify-between">
 
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             type="submit" >
-                            Add
+                            Add Plan
                         </button>
 
                     </div>
